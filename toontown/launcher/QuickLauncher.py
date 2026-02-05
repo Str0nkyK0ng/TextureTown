@@ -10,6 +10,20 @@ class QuickLauncher(LauncherBase):
 
     def __init__(self):
         print('Running: ToontownQuickLauncher')
+        # --- ADD THIS BLOCK ---
+        # This forces Panda3D to look in your 'resources' or 'assets' folder 
+        # BEFORE looking in the 'phase_3.mf' files.
+        from panda3d.core import ConfigVariableString, Filename
+        
+        # Change 'resources' to whatever your loose texture folder is named
+        my_assets = Filename.fromOsSpecific(os.getcwd() + '/resources')
+        
+        # Get the current path configuration
+        mp = ConfigVariableString('model-path')
+        
+        # Prepend your folder to the list (Priority #1)
+        mp.setValue(my_assets.getFullpath() + " " + mp.getValue())
+        print("Forced model-path to prioritize: ", my_assets.getFullpath())
         self.toontownBlueKey = 'TOONTOWN_BLUE'
         LauncherBase.__init__(self)
         self.useTTSpecificLogin = ConfigVariableBool('tt-specific-login', 0).value

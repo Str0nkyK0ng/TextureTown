@@ -12,7 +12,10 @@ aux-display tinydisplay
 depth-bits 24
 audio-sfx-active #t
 audio-music-active #t
-aspect-ratio 1.333333
+aspect-ratio 2
+
+background-sleep 0
+accept-background-events 1
 
 # Models/Resources
 model-path resources
@@ -82,7 +85,7 @@ direct-wtext 0
 on-screen-debug-font ImpressBT.ttf
 
 # Misc Settings
-inactivity-timeout 180
+inactivity-timeout 1000000
 # If require-window is true, it means that we should raise an exception if the window fails to open correctly.
 require-window 0
 # Limits the size of the buffer used.
