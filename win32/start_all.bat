@@ -14,5 +14,8 @@ start "AI" cmd /c start_ai_server.bat
 echo Starting Client...
 start "Client" cmd /c start_game.bat
 
+echo Starting Controller Mapper
+start "Controller Mapper" cmd /c start_controller_mapper.bat
+
 echo All services started!
 pause
