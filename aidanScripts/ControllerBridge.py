@@ -1,5 +1,9 @@
 import time
 import pygame
+import win32gui
+import win32con
+import win32api
+import os
 from pynput.keyboard import Key, Controller as KeyboardController
 from pynput.mouse import Button, Controller as MouseController
 
@@ -8,7 +12,47 @@ MOUSE_SENSITIVITY = 15
 DEADZONE = 0.2
 # ---------------------
 
+def make_borderless_fullscreen(window_title):
+    # 1. Find the window handle (HWND)
+    hwnd = win32gui.FindWindow(None, window_title)
+    if not hwnd:
+        print(f"Window '{window_title}' not found!")
+
+    # 2. Get the current window style
+    # GWL_STYLE retrieves the window's style bits
+    style = win32gui.GetWindowLong(hwnd, win32con.GWL_STYLE)
+
+    # 3. Remove the title bar and borders
+    # We use bitwise AND (&) with NOT (~) to remove specific style flags
+    # WS_CAPTION = Title bar
+    # WS_THICKFRAME = Resizing border
+    style = style & ~win32con.WS_CAPTION & ~win32con.WS_THICKFRAME
+    
+    # Apply the new style
+    win32gui.SetWindowLong(hwnd, win32con.GWL_STYLE, style)
+
+    # 4. Get the screen resolution
+    # 0 = SystemMetric for Screen Width
+    # 1 = SystemMetric for Screen Height
+    screen_width = win32api.GetSystemMetrics(0)
+    screen_height = win32api.GetSystemMetrics(1)
+
+    # 5. Resize and move the window
+    # HWND_TOP = Place it at the top of the Z-order
+    # SWP_FRAMECHANGED = Forces the window to redraw its style
+    win32gui.SetWindowPos(
+        hwnd, 
+        win32con.HWND_TOP, 
+        0, 0, screen_width, screen_height, 
+        win32con.SWP_FRAMECHANGED | win32con.SWP_SHOWWINDOW
+    )
+    
+    print(f"Successfully transformed '{window_title}'")
+
 def main():
+
+
+
     # 1. Initialize Pygame (for Joystick reading only)
     pygame.init()
     pygame.joystick.init()
@@ -35,6 +79,9 @@ def main():
         'right': False,
         'l_click': False
     }
+    # wait a moment for the game to start and then make it borderless fullscreen
+    time.sleep(5)  # Adjust this delay as needed for your game to load
+    make_borderless_fullscreen("Toontown")  # Change this to your game's window title
 
     try:
         while True:
@@ -119,9 +166,32 @@ def main():
                 if state['l_click']:
                     mouse.release(Button.left)
                     state['l_click'] = False
+            # do the triggers too
+            # Right Trigger (Axis 5 or 4 depending on controller/OS)
+            rt = joystick.get_axis(5)  # Adjust if your controller uses a different axis
+            lt = joystick.get_axis(4)  # Left Trigger if you want to use it for something
+            
+            if rt > DEADZONE:
+                if not state.get('rt_pressed', False):
+                    mouse.press(Button.left)
+                    state['rt_pressed'] = True
+            else:
+                if state.get('rt_pressed', False):
+                    mouse.release(Button.left)
+                    state['rt_pressed'] = False
+            
+            if lt > DEADZONE:
+                if not state.get('lt_pressed', False):
+                    keyboard.press(Key.space)
+                    state['lt_pressed'] = True
+            else:
+                if state.get('lt_pressed', False):
+                    keyboard.release(Key.space)
+                    state['lt_pressed'] = False
 
             # Sleep to prevent high CPU usage
             time.sleep(0.01)
+        
 
     except KeyboardInterrupt:
         print("\nExiting mapper...")
