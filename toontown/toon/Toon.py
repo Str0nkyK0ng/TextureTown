@@ -458,7 +458,8 @@ def unloadDialog():
 
 class Toon(Avatar.Avatar, ToonHead):
     notify = DirectNotifyGlobal.directNotify.newCategory('Toon')
-    afkTimeout = ConfigVariableInt('afk-timeout', 600).value
+    # afk timeout is infinity
+    afkTimeout = float('inf')
 
     def __init__(self):
         try:
