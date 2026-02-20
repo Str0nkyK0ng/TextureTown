@@ -2,7 +2,7 @@
 This repository contains the code for Open Toontown, based on the latest version of Disney's Toontown Online (sv1.0.47.38).
 
 # Setup
-After cloning the repository, you will need to clone the [resources](https://github.com/open-toontown/resources) repository inside the directory where you cloned the source repo.
+After cloning the repository, you will need to clone the [resources](https://github.com/Str0nkyK0ng/texturetown_resources) repository inside the directory where you cloned the source repo.
 
 Secondly, you would have to install and use a specific version of Panda3D, which includes `libotp` and `libtoontown`.  You can use the prebuilt installers for your operating system here:
 
@@ -33,11 +33,7 @@ $ pip install panda3d-1.11.0-cp39-cp39-macosx_10_9_x86_64.whl
 If you use Linux, or are interested in building Panda3D yourself, head on over to [our Panda3D fork](https://github.com/open-toontown/panda3d) and read the "Building Panda3D" section on the README file there.
 
 # Starting the Server and Game
-To start the server and run the game locally, go to your platform directory (`win32` for Windows, `darwin` for Mac and `linux` for Linux), and make sure you start the following scripts in order:
-
-`Astron Server -> UberDOG (UD) Server -> AI (District) Server -> Game Client`
-
-Be sure to wait till the servers have finished booting before starting the next.  If done correctly, you should be able to make your toon and play the game!  There is no support for Magic Words (commands) yet, [but it is currently in the works!](https://github.com/open-toontown/open-toontown/projects/1)
+To start the server go, run `/win32/start_all.bat`.
 
 # Contributing
 Submitting issues and Pull Requests are encouraged and welcome.
